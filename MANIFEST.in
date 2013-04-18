@@ -1,0 +1,4 @@
+include VERSION
+include REQUIREMENTS
+include REQUIREMENTS_LINKS
+recursive-include src/mypackage/data *
