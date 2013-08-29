@@ -1,8 +1,8 @@
 This is an attempt to put together Python packaging best-practices I've learned in an easy-to-use template you can checkout and work on.
 
-## Dependencies
+## Defining dependencies
 
-You add the required packages to `REQUIREMENTS`:
+Add the required packages to `REQUIREMENTS`, with optional version qualifies:
 
 ```
 django<1.6
@@ -15,21 +15,34 @@ Some of the requirements might not exist in PyPi, or you want to override the eg
 http://github.com/hcarvalhoalves/django-filter/tarball/master#egg=django-filter
 ```
 
+## Automatic versioning
+
+After cloning this repository, configure `setup.py` to match your project and run:
+
+```
+make update
+```
+
+This will generate the appropriate `version.py` and `.gitattributes` files using `versioneer.py`. Add those to your repository.
+
 ## Development
 
-Create your virtualenv and simply `python setup.py develop` your package into it. That's all.
+Create your virtualenv and add your package to it's path by running:
 
-## Releasing
+```
+python setup.py develop
+```
 
-The release process using the included `setup.py` and `Makefile` boils down to:
+## Releasing a version
 
-1. Update code and commit:
-`git commit -m "Change foo() to bar()"`
+There are two possible workflows for releasing:
 
-2. At any moment, tag the release (optional):
-`git tag mypackage-2.0`
+1. Releasing directly from a working copy:
+`make sdist`
 
-3. Build a source distribution:
-`make all`
+2. Releasing from a tag:
+`git tag 0.1.2 && make sdist`
 
-This would create a distribution like `dist/mypackage-2.0.tar.bz2`. If you don't tag the release, we use `git describe` to give it a unique version based on the latest commit hash, so it will turn out as something like `mypackage-1.1-a8c9.tar.bz2` (the last tag + unique hash). As a good practice, `make all` runs the test suite configured in `setup.py` and aborts building if the tests don't pass.
+3. Installing directly from a tarball (e.g.: GitHub):
+`git tag 0.1.2 && git push origin 0.1.2`
+`pip install http://github.com/hcarvalhoalves/mypackage/tarball/0.1.2#egg=mypackage`
